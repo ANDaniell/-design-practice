@@ -1,9 +1,39 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
   <diagram name="Страница — 1" id="Bhks7NLE8897tqWXi8Yq">
-    <mxGraphModel>
+    <mxGraphModel dx="989" dy="545" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-1" value=":Зритель" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-2" value=":билет" style="shape=umlBoundary;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="40" width="70" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-4" value=":сеанс" style="ellipse;shape=umlEntity;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="40" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-6" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="1">
+          <mxGeometry x="100" y="66" width="100" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-7" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="1">
+          <mxGeometry x="260" y="66" width="70" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-8" value="1:покупка" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="110" y="44" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-9" value="2:явка" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="265" y="44" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-10" value="Покупатель" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-11" value="Работник&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cRrh5-8DGzkQ_TaTyeGt-12" value="Менеджер" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="30" height="60" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
