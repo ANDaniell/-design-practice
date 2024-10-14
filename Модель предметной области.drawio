@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
   <diagram name="Страница — 1" id="wiB0xdLLIhYN8P5Gtzej">
-    <mxGraphModel dx="2723" dy="3392" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1301" dy="848" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -74,7 +74,7 @@
           <mxGeometry y="86" width="140" height="28" as="geometry" />
         </mxCell>
         <mxCell id="q_-b5fSHFq03yZxw9WrV-31" value="Билет" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="430" y="560" width="140" height="114" as="geometry" />
+          <mxGeometry x="430" y="560" width="140" height="150" as="geometry" />
         </mxCell>
         <mxCell id="q_-b5fSHFq03yZxw9WrV-33" value="+ ряд: Integer {≥0}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="q_-b5fSHFq03yZxw9WrV-31" vertex="1">
           <mxGeometry y="30" width="140" height="28" as="geometry" />
@@ -83,10 +83,13 @@
           <mxGeometry y="58" width="140" height="28" as="geometry" />
         </mxCell>
         <mxCell id="yL_lYO62eZ4KJwtUH8HO-10" value="+ сеанс: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q_-b5fSHFq03yZxw9WrV-31">
-          <mxGeometry y="86" width="140" height="28" as="geometry" />
+          <mxGeometry y="86" width="140" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="yL_lYO62eZ4KJwtUH8HO-28" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;+ цена: Integer&amp;nbsp;{≥0}&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="q_-b5fSHFq03yZxw9WrV-31">
+          <mxGeometry y="120" width="140" height="30" as="geometry" />
         </mxCell>
         <mxCell id="q_-b5fSHFq03yZxw9WrV-36" value="Зритель" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="640" y="588" width="160" height="58" as="geometry" />
+          <mxGeometry x="640" y="606" width="160" height="58" as="geometry" />
         </mxCell>
         <mxCell id="q_-b5fSHFq03yZxw9WrV-37" value="+ Ф. И. О.: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="q_-b5fSHFq03yZxw9WrV-36" vertex="1">
           <mxGeometry y="30" width="160" height="28" as="geometry" />
