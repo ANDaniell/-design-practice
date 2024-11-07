@@ -2,37 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// проверка 1
-/*
-var sessions = new List<MovieSession>
-{
-    new MovieSession(1, 101, new DateTime(2024, 11, 10, 14, 0, 0), "Main Hall", new List<string> { "A1", "A2", "A3", "A4" }),
-    new MovieSession(2, 101, new DateTime(2024, 11, 11, 16, 0, 0), "Side Hall", new List<string> { "A1", "A2", "A3", "A4" }),
-    new MovieSession(1, 101, new DateTime(2024, 11, 10, 14, 0, 0), "Main Hall", new List<string> { "A1", "A2", "A3", "A4" }),
-    new MovieSession(2, 101, new DateTime(2024, 11, 11, 16, 0, 0), "Side Hall", new List<string> { "B1", "B2", "B3", "B4" })
-};
 
-var serverApp = new ServerApplication(sessions);
-var movieSessions = serverApp.SessionCheck(101, new DateTime(2024, 11, 10), new DateTime(2024, 11, 12));
+var serverApp = new ServerApplication();
 
-foreach (var session in movieSessions)
-{
-    Console.WriteLine($"Session ID: {session.Id}, StartTime: {session.StartTime}, Hall: {session.Hall}");
-}
-*/
-// проверка 2
+// Добавляем фильм
+var movie = serverApp.AddMovie("Inception", "Sci-Fi");
 
-var sessions = new List<MovieSession>
-{
-    new MovieSession(1, 101, new DateTime(2024, 11, 10, 14, 0, 0), "Main Hall", new List<string> { "A1", "A2", "A3", "A4" }),
-    new MovieSession(2, 101, new DateTime(2024, 11, 11, 16, 0, 0), "Side Hall", new List<string> { "B1", "B2", "B3", "B4" })
-};
+// Добавляем сеанс для фильма
+var session = serverApp.AddMovieSession(movie.Id, new DateTime(2024, 11, 10, 14, 0, 0), "Main Hall", new List<string> { "A1", "A2", "A3", "A4" });
 
-var serverApp = new ServerApplication(sessions);
-
+// Покупаем билеты на сеанс
 try
 {
-    var tickets = serverApp.BuyTicket(1, new List<string> { "A1", "A2" });
+    var tickets = serverApp.BuyTicket(session.Id, new List<string> { "A1", "A2" });
     foreach (var ticket in tickets)
     {
         Console.WriteLine($"Ticket ID: {ticket.TicketId}, Session ID: {ticket.SessionId}, Seat: {ticket.Seat}");
@@ -58,6 +40,20 @@ public class Ticket
     }
 }
 
+public class Movie
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Genre { get; set; }
+
+    public Movie(int id, string title, string genre)
+    {
+        Id = id;
+        Title = title;
+        Genre = genre;
+    }
+}
+
 public class MovieSession
 {
     public int Id { get; set; }
@@ -78,13 +74,34 @@ public class MovieSession
 
 public class ServerApplication
 {
-    private List<MovieSession> sessions;    // Хранилище сеансов
-    private int nextTicketId = 1;           // Для генерации уникальных ID билетов
+    private List<Movie> movies = new List<Movie>();              // Хранилище фильмов
+    private List<MovieSession> sessions = new List<MovieSession>();  // Хранилище сеансов
+    private int nextMovieId = 1;                                 // Для генерации уникальных ID фильмов
+    private int nextSessionId = 1;                               // Для генерации уникальных ID сеансов
+    private int nextTicketId = 1;                                // Для генерации уникальных ID билетов
 
-    // Конструктор
-    public ServerApplication(List<MovieSession> sessions)
+    // Метод для добавления нового фильма
+    public Movie AddMovie(string title, string genre)
     {
-        this.sessions = sessions;
+        var movie = new Movie(nextMovieId++, title, genre);
+        movies.Add(movie);
+        return movie;
+    }
+
+    // Метод для добавления сеанса к существующему фильму
+    public MovieSession AddMovieSession(int movieId, DateTime startTime, string hall, List<string> seats)
+    {
+        // Проверка, существует ли фильм с заданным идентификатором
+        var movie = movies.FirstOrDefault(m => m.Id == movieId);
+        if (movie == null)
+        {
+            throw new Exception("Фильм не найден.");
+        }
+
+        // Создание сеанса для фильма и добавление его в список сеансов
+        var session = new MovieSession(nextSessionId++, movieId, startTime, hall, new List<string>(seats));
+        sessions.Add(session);
+        return session;
     }
 
     // Метод для покупки билета
@@ -114,20 +131,5 @@ public class ServerApplication
         }
 
         return tickets;
-    }
-
-    // Функция для проверки наличия сеансов фильма в указанном диапазоне дат
-    public List<MovieSession> SessionCheck(int movieId, DateTime startDate, DateTime endDate)
-    {
-        // Фильтруем сеансы по ID фильма, диапазону дат и сортируем по залу, затем по времени начала
-        var filteredSessions = sessions
-            .Where(session => session.MovieId == movieId
-                              && session.StartTime >= startDate
-                              && session.StartTime <= endDate)
-            .OrderBy(session => session.Hall)
-            .ThenBy(session => session.StartTime)
-            .ToList();
-
-        return filteredSessions;
     }
 }
