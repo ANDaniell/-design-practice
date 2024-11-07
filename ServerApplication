@@ -24,7 +24,23 @@ catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
 }
+var distributor = new Distributor("Universal Pictures");
+distributor.AddMovieRentalContract(5000, "2025-12-31", "2024-01-01");
+distributor.SupplyMovie(serverApp, "Inception", "Sci-Fi");
 
+var worker = new Worker("John Doe", WorkerRole.Cashier, 3000, "2025-01-01", "2024-01-01");
+
+var customer = new Customer("Alice");
+
+try
+{
+    var tickets = customer.BuyTickets(serverApp, session.Id, new List<string> { "A1", "A2" });
+    customer.WatchSession(session);
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
 
 public class Ticket
 {
@@ -71,6 +87,104 @@ public class MovieSession
         AvailableSeats = availableSeats;
     }
 }
+
+
+public enum ContractType
+{
+    MovieRental,       // Прокат фильма
+    EquipmentRental,   // Аренда оборудования
+    Advertisement,     // Рекламный контракт
+    Employment         // Контракт найма сотрудника
+}
+
+public class Contract
+{
+    public decimal MonthPayment { get; set; }    // Ежемесячная плата
+    public string EndDate { get; set; }          // Дата окончания
+    public string ConclusionDate { get; set; }   // Дата заключения контракта
+    public ContractType TypeOfContract { get; set; } // Тип контракта
+
+    public Contract(decimal monthPayment, string endDate, string conclusionDate, ContractType typeOfContract)
+    {
+        if (monthPayment < 0)
+            throw new ArgumentException("Monthly payment must be non-negative");
+
+        MonthPayment = monthPayment;
+        EndDate = endDate;
+        ConclusionDate = conclusionDate;
+        TypeOfContract = typeOfContract;
+    }
+}
+
+public class Distributor
+{
+    public string Name { get; set; }
+    public List<Contract> Contracts { get; set; } = new List<Contract>();
+
+    public Distributor(string name)
+    {
+        Name = name;
+    }
+
+    // Добавление контракта на прокат фильма
+    public void AddMovieRentalContract(decimal monthPayment, string endDate, string conclusionDate)
+    {
+        var contract = new Contract(monthPayment, endDate, conclusionDate, ContractType.MovieRental);
+        Contracts.Add(contract);
+    }
+
+    // Поставка фильма кинотеатру
+    public void SupplyMovie(ServerApplication serverApp, string title, string genre)
+    {
+        serverApp.AddMovie(title, genre);
+    }
+}
+
+public enum WorkerRole
+{
+    Cashier,
+    Usher,
+    FoodCourtStaff,
+    Cleaner,
+    Manager
+}
+
+public class Worker
+{
+    public string Name { get; set; }
+    public WorkerRole Role { get; set; }
+    public Contract EmploymentContract { get; set; }
+
+    public Worker(string name, WorkerRole role, decimal salary, string endDate, string conclusionDate)
+    {
+        Name = name;
+        Role = role;
+        EmploymentContract = new Contract(salary, endDate, conclusionDate, ContractType.Employment);
+    }
+}
+
+public class Customer
+{
+    public string Name { get; set; }
+
+    public Customer(string name)
+    {
+        Name = name;
+    }
+
+    // Покупка билетов
+    public List<Ticket> BuyTickets(ServerApplication serverApp, int sessionId, List<string> seats)
+    {
+        return serverApp.BuyTicket(sessionId, seats);
+    }
+
+    // Просмотр сеанса
+    public void WatchSession(MovieSession session)
+    {
+        Console.WriteLine($"{Name} is watching the movie at session {session.Id} in hall {session.Hall}.");
+    }
+}
+
 
 public class ServerApplication
 {
