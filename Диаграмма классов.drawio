@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.4">
   <diagram name="Страница — 1" id="X5his6ymbL0saSJvPq9O">
-    <mxGraphModel dx="1505" dy="1961" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1254" dy="1829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -118,19 +118,19 @@
           <mxGeometry y="58" width="197.5" height="28" as="geometry" />
         </mxCell>
         <mxCell id="HzvKH4_7ZR6isa68ymQ4-36" value="Contract" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="162" y="560" width="197.5" height="142" as="geometry" />
+          <mxGeometry x="162" y="560" width="198" height="142" as="geometry" />
         </mxCell>
         <mxCell id="HzvKH4_7ZR6isa68ymQ4-37" value="+ conclusion_date: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="HzvKH4_7ZR6isa68ymQ4-36" vertex="1">
-          <mxGeometry y="30" width="197.5" height="28" as="geometry" />
+          <mxGeometry y="30" width="198" height="28" as="geometry" />
         </mxCell>
         <mxCell id="HzvKH4_7ZR6isa68ymQ4-38" value="+ end_date: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="HzvKH4_7ZR6isa68ymQ4-36" vertex="1">
-          <mxGeometry y="58" width="197.5" height="28" as="geometry" />
+          <mxGeometry y="58" width="198" height="28" as="geometry" />
         </mxCell>
         <mxCell id="HzvKH4_7ZR6isa68ymQ4-39" value="+ month_payment: Real {≥0}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="HzvKH4_7ZR6isa68ymQ4-36" vertex="1">
-          <mxGeometry y="86" width="197.5" height="28" as="geometry" />
+          <mxGeometry y="86" width="198" height="28" as="geometry" />
         </mxCell>
         <mxCell id="Y5fpXC5yUhJFAgeou8nK-53" value="+ contract_type: type_of_contract" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="HzvKH4_7ZR6isa68ymQ4-36">
-          <mxGeometry y="114" width="197.5" height="28" as="geometry" />
+          <mxGeometry y="114" width="198" height="28" as="geometry" />
         </mxCell>
         <mxCell id="HzvKH4_7ZR6isa68ymQ4-40" value="Distributor" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;" parent="1" vertex="1">
           <mxGeometry x="13" y="290" width="227" height="114" as="geometry" />
@@ -232,6 +232,11 @@
           <mxGeometry width="160" relative="1" as="geometry">
             <mxPoint x="439" y="909" as="sourcePoint" />
             <mxPoint x="440" y="829" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Y5fpXC5yUhJFAgeou8nK-57" value="+subordinates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;" vertex="1" connectable="0" parent="PjLKfT54Z54VpI-UZ5yH-32">
+          <mxGeometry x="-0.1475" y="-1" relative="1" as="geometry">
+            <mxPoint x="4" y="-17" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="PjLKfT54Z54VpI-UZ5yH-38" value="− conclude_contract(d1:Distributor)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1" vertex="1">
