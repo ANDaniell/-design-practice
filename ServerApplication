@@ -185,6 +185,28 @@ public class Customer
     }
 }
 
+public class Supervisor : Worker
+{
+    public int SubordinatesNumber { get; set; }  // Количество подчиненных
+
+    public Supervisor(string name, WorkerRole role, decimal salary, string endDate, string conclusionDate, int subordinatesNumber)
+        : base(name, role, salary, endDate, conclusionDate)
+    {
+        SubordinatesNumber = subordinatesNumber;
+    }
+
+    // Дополнительные методы для работы с подчиненными можно добавлять здесь
+    public void AssignTask(string task)
+    {
+        Console.WriteLine($"{Name} assigns task: {task} to their subordinates.");
+    }
+
+    public void EvaluateSubordinates()
+    {
+        Console.WriteLine($"{Name} evaluates {SubordinatesNumber} subordinates.");
+    }
+}
+
 
 public class ServerApplication
 {
@@ -216,6 +238,22 @@ public class ServerApplication
         var session = new MovieSession(nextSessionId++, movieId, startTime, hall, new List<string>(seats));
         sessions.Add(session);
         return session;
+    }
+    
+     // Метод SessionCheck: проверяет наличие сеансов фильма в заданном диапазоне дат и сортирует их по залам
+    public List<MovieSession> SessionCheck(int movieId, DateTime startDate, DateTime endDate)
+    {
+        // Фильтрация сеансов по заданному фильму и диапазону дат
+        var filteredSessions = sessions
+            .Where(session => session.MovieId == movieId && 
+                              session.StartTime >= startDate && 
+                              session.StartTime <= endDate)
+            .OrderBy(session => session.Hall)         // Сортировка по залу
+            .ThenBy(session => session.StartTime)     // Сортировка по времени начала в каждом зале
+            .ToList();
+
+        // Возвращаем отсортированный список сеансов
+        return filteredSessions;
     }
 
     // Метод для покупки билета
