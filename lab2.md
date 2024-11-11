@@ -85,14 +85,15 @@ price: 350 — стоимость.
         - `phone_number`: String — номер телефона.
         - `open`: Boolean — статус открытия (открыт/закрыт).
     - **Методы**:
-        - `change_status()` — метод для изменения статуса открытия/закрытия кинотеатра.
-        - `add_movie(m:Movie)` — метод для добавления фильма.
-        - `add_movie_session(ms:MovieSession)` — метод для добавления сеанса фильма.
+        - `AddMovie(t:title, g:genre)` — метод для добавления фильма.
+        - `AddMovieSession(mid:movie.Id, tp:TicketPrice, st:startTime, h:hall, s:seats)` — метод для добавления сеанса фильма.
+        - `BuyTicket(sid:session.Id, rs:requestedSeats)` — метод для покупки билета.
+        - `GetSessionPrice(sid:sessionId)` — метод для получения цены билета на сеанс.
+        - `SessionCheck(*id:*Id, sd:startDate, ed:endDate)` — мктод для проверки сеансов по фильму.
     - **Ассоциации**:
-        - `ticket_windows`: связь с классом **Cashbox** (Касса).
-        - `employee`: связь с классом **Worker** (Сотрудник).
-        - `halls`: связь с классом **CinemaHall** (Кинозал).
+        - `session`: связь с классом **MovieSession** (Сеанс).
 ```C#
+
 public class ServerApplication
 {
     private List<Movie> movies = new List<Movie>();              // Хранилище фильмов
@@ -110,20 +111,20 @@ public class ServerApplication
     }
 
     // Метод для добавления сеанса к существующему фильму
- public MovieSession AddMovieSession(int movieId, int TicketPrice, DateTime startTime, string hall, List<string> seats)
- {
-     // Проверка, существует ли фильм с заданным идентификатором
-     var movie = movies.FirstOrDefault(m => m.Id == movieId);
-     if (movie == null)
-     {
-         throw new Exception("Фильм не найден.");
-     }
+    public MovieSession AddMovieSession(int movieId, int TicketPrice, DateTime startTime, string hall, List<string> seats)
+    {
+        // Проверка, существует ли фильм с заданным идентификатором
+        var movie = movies.FirstOrDefault(m => m.Id == movieId);
+        if (movie == null)
+        {
+            throw new Exception("Фильм не найден.");
+        }
 
-     // Создание сеанса для фильма и добавление его в список сеансов
-     var session = new MovieSession(nextSessionId++, movieId, TicketPrice , startTime, hall, new List<string>(seats));
-     sessions.Add(session);
-     return session;
- }
+        // Создание сеанса для фильма и добавление его в список сеансов
+        var session = new MovieSession(nextSessionId++, movieId, startTime, hall, new List<string>(seats));
+        sessions.Add(session);
+        return session;
+    }
 
     // Метод SessionCheck: проверяет наличие сеансов фильма в заданном диапазоне дат и сортирует их по залам
     public List<MovieSession> SessionCheck(int movieId, DateTime startDate, DateTime endDate)
@@ -152,23 +153,25 @@ public class ServerApplication
         }
 
         // Проверяем доступность каждого запрашиваемого места
-        var unavailableSeats = requestedSeats.Where(seat => !session.AvailableSeats.Contains(seat)).ToList();
+        var unavailableSeats = requestedSeats.Where(seat => !session.AvailableTickets.Contains(seat)).ToList();
         if (unavailableSeats.Any())
         {
             throw new Exception($"Места {string.Join(", ", unavailableSeats)} недоступны для бронирования.");
         }
 
-        // Создаем билеты для запрашиваемых мест
-        var tickets = new List<Ticket>();
+        // Создаем список билетов для запрашиваемых мест
+        var now_tickets = new List<Ticket>();
         foreach (var seat in requestedSeats)
         {
-            var ticket = new Ticket(nextTicketId++, sessionId, seat);
-            tickets.Add(ticket);
-            session.AvailableSeats.Remove(seat);  // Удаляем забронированное место из доступных
+            var ticket = session.AvailableTickets.Where(seat == session.AvailableTickets.Contains(seat));
+            now_tickets.Add(ticket);
+            ticket.Valid = false;
+            session.AvailableTickets.Remove(seat);  // Удаляем забронированное место из доступных
         }
 
-        return tickets;
+        return now_tickets;
     }
+
     public decimal GetSessionPrice(int sessionId)
     {
         // Находим сеанс по его идентификатору
@@ -190,8 +193,12 @@ public class ServerApplication
         - `number`: Integer {unique, >0} — уникальный номер кассы, больше 0.
         - `working_hours`: String — время работы кассы.
         - `worker`: String — работник, обслуживающий кассу.
+        - `serverApp`: ServerApplication - ссылка на объект ServerApplication для взаимодействия с ним
+        - `totalIncome`: Decimal - общий заработок.
+        - `serverApp`: ServerApplication - общий заработок.
     - **Методы**:
         - `get_money()` — метод для получения денег, возможно, подсчета общей суммы.
+        - `CheckSeatAvailability(sid:sessionId,sn:seatNumber)` — метод проверки доступности места на сеанс
 
 ```C#
 public class Cashbox
@@ -207,7 +214,7 @@ public class Cashbox
     public Cashbox(int number, string workingHours, string worker, ServerApplication serverApp)
     {
         if (number <= 0) throw new ArgumentException("Номер кассы должен быть больше 0.");
-        
+
         Number = number;
         WorkingHours = workingHours;
         Worker = worker;
@@ -236,16 +243,16 @@ public class Cashbox
         try
         {
             // Покупка билетов через ServerApplication
-            var tickets = serverApp.BuyTicket(sessionId, requestedSeats);
+            var now_tickets = serverApp.BuyTicket(sessionId, requestedSeats);
 
             // Добавление стоимости каждого билета к общему доходу кассы
-            foreach (var ticket in tickets)
+            foreach (var ticket in now_tickets)
             {
                 totalIncome += serverApp.GetSessionPrice(sessionId);  // Предполагаем, что ServerApplication имеет метод GetSessionPrice
                 soldTickets.Add(ticket);  // Запоминаем купленные билеты через кассу
             }
 
-            return tickets;
+            return now_tickets;
         }
         catch (Exception ex)
         {
@@ -260,11 +267,9 @@ public class Cashbox
     
     - **Атрибуты**:
         - `name`: String — название организации-дистрибьютора.
-        - `TIN`: Integer — идентификационный номер налогоплательщика.
-        - `account`: Integer — номер счета организации.
     - **Методы**:
-        - `add_movie_rental_contract()` — добавление контракта на аренду фильма.
-        - `supply_movie()` — поставка фильма.
+        - `AddMovieRentalContract(mp:monthPayment, ed:endDate, cd:conclusionDate)` — добавление контракта на аренду фильма.
+        - `SupplyMovie(sa:serverApp, t:title, g:genre)` — поставка фильма.
 
 ```C#
 public class Distributor
@@ -272,10 +277,7 @@ public class Distributor
     public string Name { get; set; }
     public List<Contract> Contracts { get; set; } = new List<Contract>();
 
-    public Distributor(string name)
-    {
-        Name = name;
-    }
+    public Distributor(string name) { Name = name; }
 
     // Добавление контракта на прокат фильма
     public void AddMovieRentalContract(decimal monthPayment, string endDate, string conclusionDate)
@@ -285,22 +287,19 @@ public class Distributor
     }
 
     // Поставка фильма кинотеатру
-    public void SupplyMovie(ServerApplication serverApp, string title, string genre)
-    {
-        serverApp.AddMovie(title, genre);
-    }
+    public void SupplyMovie(ServerApplication serverApp, string title, string genre){ serverApp.AddMovie(title, genre); }
 }
+
 ```
 4. **Contract** (Договор)
     
     - **Атрибуты**:
-        - `conclusion_date`: String — дата заключения договора.
-        - `end_date`: String — дата окончания действия договора.
-        - `month_payment`: Real {≥0} — ежемесячный платеж.
-        - `contract_type`: type_of_contract — тип контракта.
-    - **Методы**:
-        - `conclude_contract(d1:Distributor)` — заключение договора с дистрибьютором.
-        - `pay_bill(d2:Distributor)` — оплата по счету дистрибьютору.
+        - `monthPayment`: Decimal — ежемесячный платеж.
+        - `+ end_date`: String — дата окончания действия договора.
+        - `conclusionDate`: String — дата заключения договора.
+        - `typeOfContract`: enum ContractType — тип контракта.
+    - **Ассоциации**:
+        - `EmploymentContract`: связь с классом **Worker** (Работник).
 
 ```C#
 public enum ContractType
@@ -330,15 +329,13 @@ public class Contract
     }
 }
 ```
+
 5. **Movie** (Фильм)
     
     - **Атрибуты**:
+        - `id`: integer — id фильма.
         - `title`: String — название фильма.
-        - `release_date`: String — дата выхода фильма.
         - `genre`: String — жанр фильма.
-        - `production`: String — продюсер фильма.
-        - `length`: Real {≥0} — длительность фильма (в минутах).
-        - `age_limit`: Integer — возрастное ограничение.
     - **Методы**:
         - `add_film()` — добавление фильма.
 
@@ -357,24 +354,28 @@ public class Movie
     }
 }
 ```
+
 6. **CinemaHall** (Кинозал)
     
     - **Атрибуты**:
         - `cinema`: String {unique} — название кинотеатра, к которому относится зал (уникально).
         - `number`: Integer {notNull, unique} — уникальный номер зала.
-        - `rows_number`: Integer {≥0} — количество рядов в зале.
-        - `seats_row_number`: Integer {≥0} — количество мест в ряду.
+        - `rowsNumber`: Integer {≥0} — количество рядов в зале.
+        - `seatsRowNumber`: Integer {≥0} — количество мест в ряду.
         - `works`: Boolean — статус работы (функционирует/не функционирует).
     - **Методы**:
-        - `check_status()` — проверка статуса работы зала.
+        - `CheckStatus()` — проверка статуса работы зала.
+        - `GenerateSeats()` — метод для генерации и присвоения каждому месту уникальный номер
 ```C#
 public class CinemaHall
 {
-    public string Cinema { get; private set; }       // Название кинотеатра (уникальное)
+    public string Cinema { get; private set; }       // Название кинотеатра
     public int Number { get; private set; }          // Уникальный номер зала
     public int RowsNumber { get; private set; }      // Количество рядов в зале
     public int SeatsRowNumber { get; private set; }  // Количество мест в ряду
     public bool Works { get; private set; }          // Статус работы зала (функционирует/не функционирует)
+    public Dictionary<int, (int Row, int Seat)> Seats { get; private set; } // Словарь с местами: номер билета -> (ряд, место)
+
 
     // Конструктор класса
     public CinemaHall(string cinema, int number, int rowsNumber, int seatsRowNumber, bool works)
@@ -383,31 +384,45 @@ public class CinemaHall
             throw new ArgumentException("Номер зала должен быть больше 0.");
         if (rowsNumber < 0 || seatsRowNumber < 0)
             throw new ArgumentException("Количество рядов и мест в ряду должно быть неотрицательным.");
-
         Cinema = cinema;
         Number = number;
         RowsNumber = rowsNumber;
         SeatsRowNumber = seatsRowNumber;
         Works = works;
+        Seats = GenerateSeats(); 
+
+    }
+
+    private Dictionary<int, (int Row, int Seat)> GenerateSeats()
+    {
+        var seats = new Dictionary<int, (int Row, int Seat)>();
+        int ticketId = 1; // Уникальный номер для каждого места
+
+        for (int row = 1; row <= RowsNumber; row++)
+        {
+            for (int seat = 1; seat <= SeatsRowNumber; seat++)
+            {
+                seats[ticketId++] = (row, seat); // Добавляем в словарь: номер билета -> (ряд, место)
+            }
+        }
+
+        return seats;
     }
 
     // Метод для проверки статуса работы зала
-    public string CheckStatus()
-    {
-        return Works ? "Зал функционирует." : "Зал не функционирует.";
-    }
+    public string CheckStatus() { return Works ? "Зал функционирует." : "Зал не функционирует."; }
 }
+
 ```
 7. **MovieSession** (Сеанс фильма)
-    
     - **Атрибуты**:
-        - `date`: String — дата сеанса.
-        - `time`: String — время начала сеанса.
-        - `price`: Real {≥0} — стоимость билета на сеанс.
-    - **Методы**:
-        - `get_seances()` — получение списка сеансов фильма.
+        - `id`: Integer — id сеанса.
+        - `movieId`: Integer — id фильма.
+        - `ticketprice`: Integer — цена билета на фильм.
+        - `startTime`: DateTime — время начала сеанса.
+        - `hall`: CinemaHall — зал, в котором фильм.
     - **Ассоциации**:
-        - `hall`: связь с классом **CinemaHall** (Кинозал).
+        - `sessions`: связь с классом **Ticket** (Билет).
      
 ```C#
 public class MovieSession
@@ -417,42 +432,55 @@ public class MovieSession
 
     public int TicketPrice { get; set; }
     public DateTime StartTime { get; set; }
-    public string Hall { get; set; }
-    public List<string> AvailableSeats { get; set; } // Список доступных мест
+    public DateTime EndTime { get; set; }
+    public CinemaHall Hall { get; set; }
+    public List<Ticket> AvailableTickets { get; private set; } // Список доступных мест
 
-    public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, string hall, List<string> availableSeats)
+    public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, CinemaHall hall)
     {
         Id = id;
         MovieId = movieId;
         TicketPrice = ticketprice;
         StartTime = startTime;
-        Hall = hall;
-        AvailableSeats = availableSeats;
+        Hall = hall.id;
+        AvailableTickets = new List<Ticket>();
+        foreach (var seat in hall.Seats)
+        {
+            var tid = (Id << 16) | (row << 8) | seat; // создаем id для билета из id сеанса и места в зале
+            var ticket = new Ticket(tid, seat.Value.Seat,seat.Value.Row,hall.Number);
+            AvailableTickets.Add(ticket);
+        }
     }
 }
 ```
 8. **Ticket** (Билет)
     
     - **Атрибуты**:
-        - `row`: Integer {≥0} — номер ряда.
+        - `ticketId`: Integer — id номер билета.
+        - `sessionId`: Integer — id номер сеанса.
         - `seat`: Integer {≥0} — номер места.
-        - `seance`: String — идентификатор сеанса.
-        - `price`: Integer {≥0} — стоимость билета.
-    - **Методы**:
-        - `check_ticket(ms:MovieSession)` — проверка билета на указанный сеанс.
-        - `sell_ticket(v:Viewer)` — продажа билета указанному зрителю.
+        - `row`: Integer {≥0} — номер ряда.
+        - `hallnum`: Integer — номер зада.
 ```C#     
 public class Ticket
 {
     public int TicketId { get; set; }
     public int SessionId { get; set; }
-    public string Seat { get; set; }
+    public int HallNumber {get; set;}
+    public int Row { get; set; }
+    public int Seat { get; set; }
+    public bool Valid {get; set;}
+    public string BuyingTime {get; set;}
 
-    public Ticket(int ticketId, int sessionId, string seat)
+    public Ticket(int ticketId, int sessionId, int seat,int row, int hallnum)
     {
         TicketId = ticketId;
         SessionId = sessionId;
+        HallNumber = hallnum;
+        Row = row;
         Seat = seat;
+        Valid = true;
+        BuyingTime = None;
     }
 }
 ```
@@ -461,9 +489,9 @@ public class Ticket
     - **Атрибуты**:
         - `name`: String — имя зрителя.
     - **Методы**:
-        - `watch_session(v:Viewer)` — просмотр сеанса.
-        - `buy_tickets(s:Seance)` — покупка билетов на сеанс.
-     
+        - `BuyTickets(sa:serverApp, sid:sessionId, s:seats)` — покупка билетов на сеанс.
+        - `WatchSession(s:session)` — просмотр сеанса.
+      
 ```C#  
 public class Customer
 {
@@ -490,10 +518,10 @@ public class Customer
 10. **Supervisor** (Руководитель)
     
     - **Атрибуты**:
-        - `subordinates_number`: Integer {≥0} — количество подчиненных.
+        - `subordinatesNumber`: Integer {≥0} — количество подчиненных.
     - **Методы**:
-        - `assign_task()` — назначение задач.
-        - `evaluate_subordinate()` — оценка подчиненного.
+        - `AssignTask(t:task)` — назначение задач.
+        - `EvaluateSubordinates()` — оценка подчиненного.
 ```C#     
 public class Supervisor : Worker
 {
@@ -516,12 +544,16 @@ public class Supervisor : Worker
         Console.WriteLine($"{Name} evaluates {SubordinatesNumber} subordinates.");
     }
 }
+
 ```
 11. **Worker** (Сотрудник)
     
     - **Атрибуты**:
-        - `full_name`: String — полное имя сотрудника.
-        - `role`: worker_role — роль сотрудника.
+        - `name`: String — полное имя сотрудника.
+        - `role`: enum WorkerRole — роль сотрудника.
+        - `salary`: Decimal — зарплата сотрудника.
+        - `endDate`: String — конечная дата.
+        - `conclusionDate`: String — это дата завершения договора.
 ```C#  
 public enum WorkerRole
 {
@@ -553,51 +585,48 @@ public class Worker
     
     - **Ассоциация (агрегация)**: Связь показывает, что объект `ServerApplication` имеет множество касс (`Cashbox`), которыми он управляет.
     - **Тип**: Агрегация (неплотная связь), поскольку кассы могут существовать независимо от серверного приложения.
-2. **ServerApplication - CinemaHall (Серверное приложение - Кинозал)**:
+
+2. **ServerApplication - Contract (Серверное приложение - Контракт)**:
     
-    - **Ассоциация (агрегация)**: Связь отражает, что `ServerApplication` управляет несколькими кинозалами (`CinemaHall`).
-    - **Тип**: Агрегация, так как залы не зависят от серверного приложения, но принадлежат ему.
-3. **ServerApplication - Worker (Серверное приложение - Сотрудник)**:
-    
-    - **Ассоциация**: Связь указывает на то, что серверное приложение управляет сотрудниками (`Worker`), которые работают в кинотеатре.
-    - **Тип**: Агрегация, поскольку сотрудник может быть частью кинотеатра, но также может быть отделен от него.
-4. **CinemaHall - MovieSession (Кинозал - Сеанс фильма)**:
+    - **Ассоциация**: Связь указывает на то, что серверное приложение управляет контрактами (`Contract`).
+    - **Тип**: Агрегация, поскольку контракт может быть частью кинотеатра, но также может быть отделен от него.
+3. **CinemaHall - MovieSession (Кинозал - Сеанс фильма)**:
     
     - **Ассоциация (композиция)**: Каждый `CinemaHall` может иметь несколько сеансов (`MovieSession`), которые проводятся в зале.
     - **Тип**: Композиция, так как сеансы не могут существовать без кинозала.
-5. **Movie - MovieSession (Фильм - Сеанс фильма)**:
+4. **Movie - MovieSession (Фильм - Сеанс фильма)**:
     
     - **Ассоциация**: Связь показывает, что объект `Movie` может иметь несколько сеансов (`MovieSession`), в которых демонстрируется данный фильм.
     - **Тип**: Агрегация, так как сеанс связан с фильмом, но может быть организован для других фильмов.
-6. **Distributor - Contract (Дистрибьютор - Договор)**:
+5. **Distributor - Contract (Дистрибьютор - Договор)**:
     
     - **Ассоциация (агрегация)**: `Distributor` может заключать несколько контрактов (`Contract`) для предоставления фильмов кинотеатру.
     - **Тип**: Агрегация, поскольку контракт является временной связью между дистрибьютором и кинотеатром.
-7. **Contract - Distributor (Договор - Дистрибьютор)**:
+6. **Contract - Distributor (Договор - Дистрибьютор)**:
     
     - **Зависимость**: Класс `Contract` зависит от дистрибьютора (`Distributor`) для заключения и оплаты.
     - **Тип**: Зависимость, так как контракт должен ссылаться на объект `Distributor`.
-8. **Movie - Distributor (Фильм - Дистрибьютор)**:
+7. **Movie - Distributor (Фильм - Дистрибьютор)**:
     
     - **Ассоциация**: Показано, что фильм (`Movie`) предоставляется дистрибьютором (`Distributor`) в кинотеатр.
     - **Тип**: Агрегация, так как дистрибьютор поставляет фильм, но фильм может существовать независимо от него.
-9. **Ticket - MovieSession (Билет - Сеанс фильма)**:
+8. **Ticket - MovieSession (Билет - Сеанс фильма)**:
     
     - **Ассоциация**: `Ticket` привязан к конкретному сеансу фильма (`MovieSession`).
     - **Тип**: Агрегация, так как билет связан с определенным сеансом и может быть аннулирован или передан другому сеансу.
-10. **Ticket - Customer (Билет - Зритель)**:
+9. **Ticket - Customer (Билет - Зритель)**:
     
     - **Ассоциация**: `Ticket` выдается конкретному зрителю (`Customer`), который его покупает.
     - **Тип**: Ассоциация, так как билет связан с покупателем, но может быть передан другому покупателю.
-11. **Supervisor - Worker (Руководитель - Сотрудник)**:
+10. **Supervisor - Worker (Руководитель - Сотрудник)**:
     
     - **Ассоциация (агрегация)**: `Supervisor` управляет несколькими `Worker`, являющимися подчиненными.
     - **Тип**: Агрегация, так как подчиненные являются частью команды под руководством.
-12. **Movie - Contract (Фильм - Договор)**:
+11. **Movie - Contract (Фильм - Договор)**:
     
     - **Ассоциация (зависимость)**: `Movie` может быть предметом договора, заключенного с дистрибьютором.
     - **Тип**: Зависимость, так как фильм указывается в контракте на поставку.
-13. **ServerApplication - Movie (Серверное приложение - Фильм)**:
+12. **ServerApplication - Movie (Серверное приложение - Фильм)**:
     
     - **Ассоциация (агрегация)**: `ServerApplication` может управлять фильмами (`Movie`), добавляя их в базу данных.
     - **Тип**: Агрегация, так как фильмы могут существовать независимо от серверного приложения.
@@ -645,17 +674,13 @@ public class Worker
 
 #### Описание процесса:
 
-1. **purchaseRequest** — интерфейс отправляет запрос `purchaseRequest(sessionId, hall, place[], paymentInfo)` в `ServerApplication`. Этот запрос содержит идентификатор сеанса, зал, места для бронирования и информацию об оплате.
+1. **BuyTicket** — интерфейс отправляет запрос `BuyTicket(nextTicketId++, hall, place[])` в `ServerApplication`. Этот запрос содержит идентификатор сеанса, зал и места для бронирования.
     
-2. **Создание запроса на резервирование** — `ServerApplication` создает новый запрос резервирования, вызывая `new(sessionId, hall, place[])` в `DataBase`. Это инициирует создание объекта `ReservationRequest` с информацией о сеансе и выбранных местах.
+2. **Создание запроса на резервирование** — `ServerApplication` создает новый запрос резервирования, вызывая `new(sessionId, hall, place[])` в `Tickets`. Это инициирует создание объекта `ticket:Ticket` с информацией о сеансе и выбранных местах.
     
-3. **takeId()** — после создания объекта `ReservationRequest`, он вызывает метод `takeId()` для генерации уникального идентификатора для этого запроса.
+3. **add(ticket)** — после создания объекта `ticket:Ticket`, вызывается метод `add(ticket)` для сохранения информации о покупке билета.
     
-4. **Присвоение tId** — метод `takeId()` возвращает уникальный идентификатор `tId`, который присваивается запросу на резервирование (`rr.Id = tId`).
-    
-5. **Резервирование мест** — после получения идентификатора, база данных вызывает `reserving(sessionId, hall, place[], id)`, завершая процесс резервирования указанных мест для данного сеанса с присвоением идентификатора `id`.
-    
-6. **Возвращение ответа** — `ServerApplication` получает подтверждение о резервировании и возвращает информацию об успешной операции обратно в `Interface`.
+4. **remove(seat)** — метод `remove(seat)` удаляет из объекта `Session` купленное место (делает его недоступным для повторной покупки).
     
 
 **Результат:** 
