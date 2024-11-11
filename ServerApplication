@@ -42,17 +42,29 @@ catch (Exception ex)
     Console.WriteLine(ex.Message);
 }
 
+
+
+
+
 public class Ticket
 {
     public int TicketId { get; set; }
     public int SessionId { get; set; }
-    public string Seat { get; set; }
+    public int HallNumber {get; set;}
+    public int Row { get; set; }
+    public int Seat { get; set; }
+    public bool Valid {get; set;}
+    public string BuyingTime {get; set;}
 
-    public Ticket(int ticketId, int sessionId, string seat)
+    public Ticket(int ticketId, int sessionId, int seat,int row, int hallnum)
     {
         TicketId = ticketId;
         SessionId = sessionId;
+        HallNumber = hallnum;
+        Row = row;
         Seat = seat;
+        Valid = true;
+        BuyingTime = None;
     }
 }
 
@@ -77,17 +89,24 @@ public class MovieSession
 
     public int TicketPrice { get; set; }
     public DateTime StartTime { get; set; }
-    public string Hall { get; set; }
-    public List<string> AvailableSeats { get; set; } // Список доступных мест
+    public DateTime EndTime { get; set; }
+    public CinemaHall Hall { get; set; }
+    public List<Ticket> AvailableTickets { get; set; } // Список доступных мест
 
-    public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, string hall, List<string> availableSeats)
+    public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, CinemaHall hall)
     {
         Id = id;
         MovieId = movieId;
         TicketPrice = ticketprice;
         StartTime = startTime;
-        Hall = hall;
-        AvailableSeats = availableSeats;
+        Hall = hall.id;
+        AvailableTickets = new List<Ticket>();
+        foreach (var seat in hall.Seats)
+        {
+            var tid = (Id << 16) | (row << 8) | seat; // создаем id для билета из id сеанса и места в зале
+            var ticket = new Ticket(tid, seat.Value.Seat,seat.Value.Row,hall.Number);
+            AvailableTickets.Add(ticket);
+        }
     }
 }
 
@@ -124,10 +143,7 @@ public class Distributor
     public string Name { get; set; }
     public List<Contract> Contracts { get; set; } = new List<Contract>();
 
-    public Distributor(string name)
-    {
-        Name = name;
-    }
+    public Distributor(string name) { Name = name; }
 
     // Добавление контракта на прокат фильма
     public void AddMovieRentalContract(decimal monthPayment, string endDate, string conclusionDate)
@@ -137,10 +153,7 @@ public class Distributor
     }
 
     // Поставка фильма кинотеатру
-    public void SupplyMovie(ServerApplication serverApp, string title, string genre)
-    {
-        serverApp.AddMovie(title, genre);
-    }
+    public void SupplyMovie(ServerApplication serverApp, string title, string genre){ serverApp.AddMovie(title, genre); }
 }
 
 public enum WorkerRole
@@ -273,11 +286,13 @@ public class Cashbox
 
 public class CinemaHall
 {
-    public string Cinema { get; private set; }       // Название кинотеатра (уникальное)
+    public string Cinema { get; private set; }       // Название кинотеатра
     public int Number { get; private set; }          // Уникальный номер зала
     public int RowsNumber { get; private set; }      // Количество рядов в зале
     public int SeatsRowNumber { get; private set; }  // Количество мест в ряду
     public bool Works { get; private set; }          // Статус работы зала (функционирует/не функционирует)
+    public Dictionary<int, (int Row, int Seat)> Seats { get; private set; } // Словарь с местами: номер билета -> (ряд, место)
+
 
     // Конструктор класса
     public CinemaHall(string cinema, int number, int rowsNumber, int seatsRowNumber, bool works)
@@ -286,19 +301,33 @@ public class CinemaHall
             throw new ArgumentException("Номер зала должен быть больше 0.");
         if (rowsNumber < 0 || seatsRowNumber < 0)
             throw new ArgumentException("Количество рядов и мест в ряду должно быть неотрицательным.");
-
         Cinema = cinema;
         Number = number;
         RowsNumber = rowsNumber;
         SeatsRowNumber = seatsRowNumber;
         Works = works;
+        Seats = GenerateSeats(); 
+
+    }
+
+    private Dictionary<int, (int Row, int Seat)> GenerateSeats()
+    {
+        var seats = new Dictionary<int, (int Row, int Seat)>();
+        int ticketId = 1; // Уникальный номер для каждого места
+
+        for (int row = 1; row <= RowsNumber; row++)
+        {
+            for (int seat = 1; seat <= SeatsRowNumber; seat++)
+            {
+                seats[ticketId++] = (row, seat); // Добавляем в словарь: номер билета -> (ряд, место)
+            }
+        }
+
+        return seats;
     }
 
     // Метод для проверки статуса работы зала
-    public string CheckStatus()
-    {
-        return Works ? "Зал функционирует." : "Зал не функционирует.";
-    }
+    public string CheckStatus() { return Works ? "Зал функционирует." : "Зал не функционирует."; }
 }
 
 public class ServerApplication
