@@ -91,6 +91,98 @@ price: 350 — стоимость.
         - `ticket_windows`: связь с классом **Cashbox** (Касса).
         - `employee`: связь с классом **Worker** (Сотрудник).
         - `halls`: связь с классом **CinemaHall** (Кинозал).
+```C#
+public class ServerApplication
+{
+    private List<Movie> movies = new List<Movie>();              // Хранилище фильмов
+    private List<MovieSession> sessions = new List<MovieSession>();  // Хранилище сеансов
+    private int nextMovieId = 1;                                 // Для генерации уникальных ID фильмов
+    private int nextSessionId = 1;                               // Для генерации уникальных ID сеансов
+    private int nextTicketId = 1;                                // Для генерации уникальных ID билетов
+
+    // Метод для добавления нового фильма
+    public Movie AddMovie(string title, string genre)
+    {
+        var movie = new Movie(nextMovieId++, title, genre);
+        movies.Add(movie);
+        return movie;
+    }
+
+    // Метод для добавления сеанса к существующему фильму
+ public MovieSession AddMovieSession(int movieId, int TicketPrice, DateTime startTime, string hall, List<string> seats)
+ {
+     // Проверка, существует ли фильм с заданным идентификатором
+     var movie = movies.FirstOrDefault(m => m.Id == movieId);
+     if (movie == null)
+     {
+         throw new Exception("Фильм не найден.");
+     }
+
+     // Создание сеанса для фильма и добавление его в список сеансов
+     var session = new MovieSession(nextSessionId++, movieId, TicketPrice , startTime, hall, new List<string>(seats));
+     sessions.Add(session);
+     return session;
+ }
+
+    // Метод SessionCheck: проверяет наличие сеансов фильма в заданном диапазоне дат и сортирует их по залам
+    public List<MovieSession> SessionCheck(int movieId, DateTime startDate, DateTime endDate)
+    {
+        // Фильтрация сеансов по заданному фильму и диапазону дат
+        var filteredSessions = sessions
+            .Where(session => session.MovieId == movieId &&
+                              session.StartTime >= startDate &&
+                              session.StartTime <= endDate)
+            .OrderBy(session => session.Hall)         // Сортировка по залу
+            .ThenBy(session => session.StartTime)     // Сортировка по времени начала в каждом зале
+            .ToList();
+
+        // Возвращаем отсортированный список сеансов
+        return filteredSessions;
+    }
+
+    // Метод для покупки билета
+    public List<Ticket> BuyTicket(int sessionId, List<string> requestedSeats)
+    {
+        // Находим сеанс по идентификатору
+        var session = sessions.FirstOrDefault(s => s.Id == sessionId);
+        if (session == null)
+        {
+            throw new Exception("Сеанс не найден.");
+        }
+
+        // Проверяем доступность каждого запрашиваемого места
+        var unavailableSeats = requestedSeats.Where(seat => !session.AvailableSeats.Contains(seat)).ToList();
+        if (unavailableSeats.Any())
+        {
+            throw new Exception($"Места {string.Join(", ", unavailableSeats)} недоступны для бронирования.");
+        }
+
+        // Создаем билеты для запрашиваемых мест
+        var tickets = new List<Ticket>();
+        foreach (var seat in requestedSeats)
+        {
+            var ticket = new Ticket(nextTicketId++, sessionId, seat);
+            tickets.Add(ticket);
+            session.AvailableSeats.Remove(seat);  // Удаляем забронированное место из доступных
+        }
+
+        return tickets;
+    }
+    public decimal GetSessionPrice(int sessionId)
+    {
+        // Находим сеанс по его идентификатору
+        var session = sessions.FirstOrDefault(s => s.Id == sessionId);
+
+        if (session == null)
+        {
+            throw new Exception("Сеанс не найден.");
+        }
+
+        // Возвращаем цену билета для данного сеанса
+        return session.TicketPrice;
+    }
+}
+```
 2. **Cashbox** (Касса)
     
     - **Атрибуты**:
@@ -99,6 +191,70 @@ price: 350 — стоимость.
         - `worker`: String — работник, обслуживающий кассу.
     - **Методы**:
         - `get_money()` — метод для получения денег, возможно, подсчета общей суммы.
+
+```C#
+public class Cashbox
+{
+    public int Number { get; private set; }                // Уникальный номер кассы
+    public string WorkingHours { get; private set; }       // Время работы кассы
+    public string Worker { get; private set; }             // Работник, обслуживающий кассу
+
+    private decimal totalIncome;                           // Общий доход кассы
+    private ServerApplication serverApp;                   // Ссылка на объект ServerApplication для взаимодействия с ним
+    private List<Ticket> soldTickets;                      // Список проданных через кассу билетов
+
+    public Cashbox(int number, string workingHours, string worker, ServerApplication serverApp)
+    {
+        if (number <= 0) throw new ArgumentException("Номер кассы должен быть больше 0.");
+        
+        Number = number;
+        WorkingHours = workingHours;
+        Worker = worker;
+        this.serverApp = serverApp;
+
+        totalIncome = 0;
+        soldTickets = new List<Ticket>();
+    }
+
+    // Метод для подсчета общего дохода
+    public decimal GetMoney()
+    {
+        return totalIncome;
+    }
+
+    // Метод проверки доступности места на сеанс
+    public bool CheckSeatAvailability(int sessionId, string seatNumber)
+    {
+        var session = serverApp.SessionCheck(sessionId, DateTime.Now, DateTime.Now).FirstOrDefault();
+        return session != null && session.AvailableSeats.Contains(seatNumber);
+    }
+
+    // Метод для покупки билета через кассу
+    public List<Ticket> BuyTicket(int sessionId, List<string> requestedSeats)
+    {
+        try
+        {
+            // Покупка билетов через ServerApplication
+            var tickets = serverApp.BuyTicket(sessionId, requestedSeats);
+
+            // Добавление стоимости каждого билета к общему доходу кассы
+            foreach (var ticket in tickets)
+            {
+                totalIncome += serverApp.GetSessionPrice(sessionId);  // Предполагаем, что ServerApplication имеет метод GetSessionPrice
+                soldTickets.Add(ticket);  // Запоминаем купленные билеты через кассу
+            }
+
+            return tickets;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при покупке билетов: " + ex.Message);
+            return new List<Ticket>();
+        }
+    }
+}
+
+```
 3. **Distributor** (Дистрибьютор)
     
     - **Атрибуты**:
@@ -108,6 +264,32 @@ price: 350 — стоимость.
     - **Методы**:
         - `add_movie_rental_contract()` — добавление контракта на аренду фильма.
         - `supply_movie()` — поставка фильма.
+
+```C#
+public class Distributor
+{
+    public string Name { get; set; }
+    public List<Contract> Contracts { get; set; } = new List<Contract>();
+
+    public Distributor(string name)
+    {
+        Name = name;
+    }
+
+    // Добавление контракта на прокат фильма
+    public void AddMovieRentalContract(decimal monthPayment, string endDate, string conclusionDate)
+    {
+        var contract = new Contract(monthPayment, endDate, conclusionDate, ContractType.MovieRental);
+        Contracts.Add(contract);
+    }
+
+    // Поставка фильма кинотеатру
+    public void SupplyMovie(ServerApplication serverApp, string title, string genre)
+    {
+        serverApp.AddMovie(title, genre);
+    }
+}
+```
 4. **Contract** (Договор)
     
     - **Атрибуты**:
@@ -118,6 +300,35 @@ price: 350 — стоимость.
     - **Методы**:
         - `conclude_contract(d1:Distributor)` — заключение договора с дистрибьютором.
         - `pay_bill(d2:Distributor)` — оплата по счету дистрибьютору.
+
+```C#
+public enum ContractType
+{
+    MovieRental,       // Прокат фильма
+    EquipmentRental,   // Аренда оборудования
+    Advertisement,     // Рекламный контракт
+    Employment         // Контракт найма сотрудника
+}
+
+public class Contract
+{
+    public decimal MonthPayment { get; set; }    // Ежемесячная плата
+    public string EndDate { get; set; }          // Дата окончания
+    public string ConclusionDate { get; set; }   // Дата заключения контракта
+    public ContractType TypeOfContract { get; set; } // Тип контракта
+
+    public Contract(decimal monthPayment, string endDate, string conclusionDate, ContractType typeOfContract)
+    {
+        if (monthPayment < 0)
+            throw new ArgumentException("Monthly payment must be non-negative");
+
+        MonthPayment = monthPayment;
+        EndDate = endDate;
+        ConclusionDate = conclusionDate;
+        TypeOfContract = typeOfContract;
+    }
+}
+```
 5. **Movie** (Фильм)
     
     - **Атрибуты**:
@@ -129,6 +340,22 @@ price: 350 — стоимость.
         - `age_limit`: Integer — возрастное ограничение.
     - **Методы**:
         - `add_film()` — добавление фильма.
+
+```C#
+public class Movie
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Genre { get; set; }
+
+    public Movie(int id, string title, string genre)
+    {
+        Id = id;
+        Title = title;
+        Genre = genre;
+    }
+}
+```
 6. **CinemaHall** (Кинозал)
     
     - **Атрибуты**:
@@ -139,6 +366,37 @@ price: 350 — стоимость.
         - `works`: Boolean — статус работы (функционирует/не функционирует).
     - **Методы**:
         - `check_status()` — проверка статуса работы зала.
+```C#
+public class CinemaHall
+{
+    public string Cinema { get; private set; }       // Название кинотеатра (уникальное)
+    public int Number { get; private set; }          // Уникальный номер зала
+    public int RowsNumber { get; private set; }      // Количество рядов в зале
+    public int SeatsRowNumber { get; private set; }  // Количество мест в ряду
+    public bool Works { get; private set; }          // Статус работы зала (функционирует/не функционирует)
+
+    // Конструктор класса
+    public CinemaHall(string cinema, int number, int rowsNumber, int seatsRowNumber, bool works)
+    {
+        if (number <= 0)
+            throw new ArgumentException("Номер зала должен быть больше 0.");
+        if (rowsNumber < 0 || seatsRowNumber < 0)
+            throw new ArgumentException("Количество рядов и мест в ряду должно быть неотрицательным.");
+
+        Cinema = cinema;
+        Number = number;
+        RowsNumber = rowsNumber;
+        SeatsRowNumber = seatsRowNumber;
+        Works = works;
+    }
+
+    // Метод для проверки статуса работы зала
+    public string CheckStatus()
+    {
+        return Works ? "Зал функционирует." : "Зал не функционирует.";
+    }
+}
+```
 7. **MovieSession** (Сеанс фильма)
     
     - **Атрибуты**:
@@ -149,6 +407,29 @@ price: 350 — стоимость.
         - `get_seances()` — получение списка сеансов фильма.
     - **Ассоциации**:
         - `hall`: связь с классом **CinemaHall** (Кинозал).
+     
+```C#
+public class MovieSession
+{
+    public int Id { get; set; }
+    public int MovieId { get; set; }
+
+    public int TicketPrice { get; set; }
+    public DateTime StartTime { get; set; }
+    public string Hall { get; set; }
+    public List<string> AvailableSeats { get; set; } // Список доступных мест
+
+    public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, string hall, List<string> availableSeats)
+    {
+        Id = id;
+        MovieId = movieId;
+        TicketPrice = ticketprice;
+        StartTime = startTime;
+        Hall = hall;
+        AvailableSeats = availableSeats;
+    }
+}
+```
 8. **Ticket** (Билет)
     
     - **Атрибуты**:
@@ -159,6 +440,21 @@ price: 350 — стоимость.
     - **Методы**:
         - `check_ticket(ms:MovieSession)` — проверка билета на указанный сеанс.
         - `sell_ticket(v:Viewer)` — продажа билета указанному зрителю.
+```C#     
+public class Ticket
+{
+    public int TicketId { get; set; }
+    public int SessionId { get; set; }
+    public string Seat { get; set; }
+
+    public Ticket(int ticketId, int sessionId, string seat)
+    {
+        TicketId = ticketId;
+        SessionId = sessionId;
+        Seat = seat;
+    }
+}
+```
 9. **Customer** (Зритель)
     
     - **Атрибуты**:
@@ -166,6 +462,30 @@ price: 350 — стоимость.
     - **Методы**:
         - `watch_session(v:Viewer)` — просмотр сеанса.
         - `buy_tickets(s:Seance)` — покупка билетов на сеанс.
+     
+```C#  
+public class Customer
+{
+    public string Name { get; set; }
+
+    public Customer(string name)
+    {
+        Name = name;
+    }
+
+    // Покупка билетов
+    public List<Ticket> BuyTickets(ServerApplication serverApp, int sessionId, List<string> seats)
+    {
+        return serverApp.BuyTicket(sessionId, seats);
+    }
+
+    // Просмотр сеанса
+    public void WatchSession(MovieSession session)
+    {
+        Console.WriteLine($"{Name} is watching the movie at session {session.Id} in hall {session.Hall}.");
+    }
+}
+```
 10. **Supervisor** (Руководитель)
     
     - **Атрибуты**:
@@ -173,12 +493,58 @@ price: 350 — стоимость.
     - **Методы**:
         - `assign_task()` — назначение задач.
         - `evaluate_subordinate()` — оценка подчиненного.
+```C#     
+public class Supervisor : Worker
+{
+    public int SubordinatesNumber { get; set; }  // Количество подчиненных
+
+    public Supervisor(string name, WorkerRole role, decimal salary, string endDate, string conclusionDate, int subordinatesNumber)
+        : base(name, role, salary, endDate, conclusionDate)
+    {
+        SubordinatesNumber = subordinatesNumber;
+    }
+
+    // Дополнительные методы для работы с подчиненными можно добавлять здесь
+    public void AssignTask(string task)
+    {
+        Console.WriteLine($"{Name} assigns task: {task} to their subordinates.");
+    }
+
+    public void EvaluateSubordinates()
+    {
+        Console.WriteLine($"{Name} evaluates {SubordinatesNumber} subordinates.");
+    }
+}
+```
 11. **Worker** (Сотрудник)
     
     - **Атрибуты**:
         - `full_name`: String — полное имя сотрудника.
         - `role`: worker_role — роль сотрудника.
+```C#  
+public enum WorkerRole
+{
+    Cashier,
+    Usher,
+    FoodCourtStaff,
+    Cleaner,
+    Manager
+}
 
+public class Worker
+{
+    public string Name { get; set; }
+    public WorkerRole Role { get; set; }
+    public Contract EmploymentContract { get; set; }
+
+    public Worker(string name, WorkerRole role, decimal salary, string endDate, string conclusionDate)
+    {
+        Name = name;
+        Role = role;
+        EmploymentContract = new Contract(salary, endDate, conclusionDate, ContractType.Employment);
+    }
+}
+```
 
 #### Связи между классами:
 
