@@ -14,8 +14,8 @@ var session = serverApp.AddMovieSession(movie.Id, new DateTime(2024, 11, 10, 14,
 // Покупаем билеты на сеанс
 try
 {
-    var tickets = serverApp.BuyTicket(session.Id, new List<string> { "A1", "A2" });
-    foreach (var ticket in tickets)
+    var now_tickets = serverApp.BuyTicket(session.Id, new List<string> { "A1", "A2" });
+    foreach (var ticket in now_tickets)
     {
         Console.WriteLine($"Ticket ID: {ticket.TicketId}, Session ID: {ticket.SessionId}, Seat: {ticket.Seat}");
     }
@@ -34,7 +34,7 @@ var customer = new Customer("Alice");
 
 try
 {
-    var tickets = customer.BuyTickets(serverApp, session.Id, new List<string> { "A1", "A2" });
+    var now_tickets = customer.BuyTickets(serverApp, session.Id, new List<string> { "A1", "A2" });
     customer.WatchSession(session);
 }
 catch (Exception ex)
@@ -91,7 +91,7 @@ public class MovieSession
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public CinemaHall Hall { get; set; }
-    public List<Ticket> AvailableTickets { get; set; } // Список доступных мест
+    public List<Ticket> AvailableTickets { get; private set; } // Список доступных мест
 
     public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, CinemaHall hall)
     {
@@ -265,16 +265,16 @@ public class Cashbox
         try
         {
             // Покупка билетов через ServerApplication
-            var tickets = serverApp.BuyTicket(sessionId, requestedSeats);
+            var now_tickets = serverApp.BuyTicket(sessionId, requestedSeats);
 
             // Добавление стоимости каждого билета к общему доходу кассы
-            foreach (var ticket in tickets)
+            foreach (var ticket in now_tickets)
             {
                 totalIncome += serverApp.GetSessionPrice(sessionId);  // Предполагаем, что ServerApplication имеет метод GetSessionPrice
                 soldTickets.Add(ticket);  // Запоминаем купленные билеты через кассу
             }
 
-            return tickets;
+            return now_tickets;
         }
         catch (Exception ex)
         {
@@ -389,22 +389,23 @@ public class ServerApplication
         }
 
         // Проверяем доступность каждого запрашиваемого места
-        var unavailableSeats = requestedSeats.Where(seat => !session.AvailableSeats.Contains(seat)).ToList();
+        var unavailableSeats = requestedSeats.Where(seat => !session.AvailableTickets.Contains(seat)).ToList();
         if (unavailableSeats.Any())
         {
             throw new Exception($"Места {string.Join(", ", unavailableSeats)} недоступны для бронирования.");
         }
 
-        // Создаем билеты для запрашиваемых мест
-        var tickets = new List<Ticket>();
+        // Создаем список билетов для запрашиваемых мест
+        var now_tickets = new List<Ticket>();
         foreach (var seat in requestedSeats)
         {
-            var ticket = new Ticket(nextTicketId++, sessionId, seat);
-            tickets.Add(ticket);
-            session.AvailableSeats.Remove(seat);  // Удаляем забронированное место из доступных
+            var ticket = session.AvailableTickets.Where(seat == session.AvailableTickets.Contains(seat));
+            now_tickets.Add(ticket);
+            ticket.Valid = false;
+            session.AvailableTickets.Remove(seat);  // Удаляем забронированное место из доступных
         }
 
-        return tickets;
+        return now_tickets;
     }
 
     public decimal GetSessionPrice(int sessionId)
