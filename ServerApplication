@@ -74,14 +74,17 @@ public class MovieSession
 {
     public int Id { get; set; }
     public int MovieId { get; set; }
+
+    public int TicketPrice { get; set; }
     public DateTime StartTime { get; set; }
     public string Hall { get; set; }
     public List<string> AvailableSeats { get; set; } // Список доступных мест
 
-    public MovieSession(int id, int movieId, DateTime startTime, string hall, List<string> availableSeats)
+    public MovieSession(int id, int movieId,int ticketprice, DateTime startTime, string hall, List<string> availableSeats)
     {
         Id = id;
         MovieId = movieId;
+        TicketPrice = ticketprice;
         StartTime = startTime;
         Hall = hall;
         AvailableSeats = availableSeats;
@@ -207,6 +210,96 @@ public class Supervisor : Worker
     }
 }
 
+public class Cashbox
+{
+    public int Number { get; private set; }                // Уникальный номер кассы
+    public string WorkingHours { get; private set; }       // Время работы кассы
+    public string Worker { get; private set; }             // Работник, обслуживающий кассу
+
+    private decimal totalIncome;                           // Общий доход кассы
+    private ServerApplication serverApp;                   // Ссылка на объект ServerApplication для взаимодействия с ним
+    private List<Ticket> soldTickets;                      // Список проданных через кассу билетов
+
+    public Cashbox(int number, string workingHours, string worker, ServerApplication serverApp)
+    {
+        if (number <= 0) throw new ArgumentException("Номер кассы должен быть больше 0.");
+
+        Number = number;
+        WorkingHours = workingHours;
+        Worker = worker;
+        this.serverApp = serverApp;
+
+        totalIncome = 0;
+        soldTickets = new List<Ticket>();
+    }
+
+    // Метод для подсчета общего дохода
+    public decimal GetMoney()
+    {
+        return totalIncome;
+    }
+
+    // Метод проверки доступности места на сеанс
+    public bool CheckSeatAvailability(int sessionId, string seatNumber)
+    {
+        var session = serverApp.SessionCheck(sessionId, DateTime.Now, DateTime.Now).FirstOrDefault();
+        return session != null && session.AvailableSeats.Contains(seatNumber);
+    }
+
+    // Метод для покупки билета через кассу
+    public List<Ticket> BuyTicket(int sessionId, List<string> requestedSeats)
+    {
+        try
+        {
+            // Покупка билетов через ServerApplication
+            var tickets = serverApp.BuyTicket(sessionId, requestedSeats);
+
+            // Добавление стоимости каждого билета к общему доходу кассы
+            foreach (var ticket in tickets)
+            {
+                totalIncome += serverApp.GetSessionPrice(sessionId);  // Предполагаем, что ServerApplication имеет метод GetSessionPrice
+                soldTickets.Add(ticket);  // Запоминаем купленные билеты через кассу
+            }
+
+            return tickets;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при покупке билетов: " + ex.Message);
+            return new List<Ticket>();
+        }
+    }
+}
+
+public class CinemaHall
+{
+    public string Cinema { get; private set; }       // Название кинотеатра (уникальное)
+    public int Number { get; private set; }          // Уникальный номер зала
+    public int RowsNumber { get; private set; }      // Количество рядов в зале
+    public int SeatsRowNumber { get; private set; }  // Количество мест в ряду
+    public bool Works { get; private set; }          // Статус работы зала (функционирует/не функционирует)
+
+    // Конструктор класса
+    public CinemaHall(string cinema, int number, int rowsNumber, int seatsRowNumber, bool works)
+    {
+        if (number <= 0)
+            throw new ArgumentException("Номер зала должен быть больше 0.");
+        if (rowsNumber < 0 || seatsRowNumber < 0)
+            throw new ArgumentException("Количество рядов и мест в ряду должно быть неотрицательным.");
+
+        Cinema = cinema;
+        Number = number;
+        RowsNumber = rowsNumber;
+        SeatsRowNumber = seatsRowNumber;
+        Works = works;
+    }
+
+    // Метод для проверки статуса работы зала
+    public string CheckStatus()
+    {
+        return Works ? "Зал функционирует." : "Зал не функционирует.";
+    }
+}
 
 public class ServerApplication
 {
@@ -225,7 +318,7 @@ public class ServerApplication
     }
 
     // Метод для добавления сеанса к существующему фильму
-    public MovieSession AddMovieSession(int movieId, DateTime startTime, string hall, List<string> seats)
+    public MovieSession AddMovieSession(int movieId, int TicketPrice, DateTime startTime, string hall, List<string> seats)
     {
         // Проверка, существует ли фильм с заданным идентификатором
         var movie = movies.FirstOrDefault(m => m.Id == movieId);
@@ -239,14 +332,14 @@ public class ServerApplication
         sessions.Add(session);
         return session;
     }
-    
-     // Метод SessionCheck: проверяет наличие сеансов фильма в заданном диапазоне дат и сортирует их по залам
+
+    // Метод SessionCheck: проверяет наличие сеансов фильма в заданном диапазоне дат и сортирует их по залам
     public List<MovieSession> SessionCheck(int movieId, DateTime startDate, DateTime endDate)
     {
         // Фильтрация сеансов по заданному фильму и диапазону дат
         var filteredSessions = sessions
-            .Where(session => session.MovieId == movieId && 
-                              session.StartTime >= startDate && 
+            .Where(session => session.MovieId == movieId &&
+                              session.StartTime >= startDate &&
                               session.StartTime <= endDate)
             .OrderBy(session => session.Hall)         // Сортировка по залу
             .ThenBy(session => session.StartTime)     // Сортировка по времени начала в каждом зале
@@ -283,5 +376,19 @@ public class ServerApplication
         }
 
         return tickets;
+    }
+
+    public decimal GetSessionPrice(int sessionId)
+    {
+        // Находим сеанс по его идентификатору
+        var session = sessions.FirstOrDefault(s => s.Id == sessionId);
+
+        if (session == null)
+        {
+            throw new Exception("Сеанс не найден.");
+        }
+
+        // Возвращаем цену билета для данного сеанса
+        return session.TicketPrice;
     }
 }
