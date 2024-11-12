@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" version="24.8.4" pages="3">
   <diagram name="SessionMapping" id="v43Xx_EDsvY6eAHWIbAX">
-    <mxGraphModel dx="472" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="541" dy="788" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -107,14 +107,14 @@
         <mxCell id="nzL9g1eNjnsppFl03VkQ-43" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;filteredSession&lt;/font&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="91.25" y="390" width="87.5" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="FkVD33n09qTK4fxIXTO3-1" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;loop [for each session in sessions]&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=220;height=30;" vertex="1" parent="1">
-          <mxGeometry x="160" y="180" width="390" height="200" as="geometry" />
+        <mxCell id="FkVD33n09qTK4fxIXTO3-1" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;loop [for each session in sessions]&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=220;height=30;" parent="1" vertex="1">
+          <mxGeometry x="160" y="180" width="280" height="200" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="ZGCRPeOevb4IT5yTfv5a" name="BuyingInitialization">
-    <mxGraphModel dx="472" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="541" dy="788" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -167,18 +167,18 @@
           <mxGeometry x="185" y="150" width="20" height="270" as="geometry" />
         </mxCell>
         <mxCell id="uQY5IywjhWXq_1PrJAmy-17" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="294" y="40" width="126" height="30" as="geometry" />
+          <mxGeometry x="578" y="40" width="126" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uQY5IywjhWXq_1PrJAmy-18" value=":Tickets" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="294" y="40" width="126" height="30" as="geometry" />
+        <mxCell id="uQY5IywjhWXq_1PrJAmy-18" value="ticket: Ticket" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="578" y="40" width="126" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uQY5IywjhWXq_1PrJAmy-19" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.531;entryY=0.957;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="uQY5IywjhWXq_1PrJAmy-18" edge="1">
+        <mxCell id="uQY5IywjhWXq_1PrJAmy-19" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="uQY5IywjhWXq_1PrJAmy-18" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="361" y="480" as="sourcePoint" />
-            <mxPoint x="355.5" y="80" as="targetPoint" />
+            <mxPoint x="641" y="480" as="sourcePoint" />
+            <mxPoint x="643.906" y="68.71000000000004" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="uQY5IywjhWXq_1PrJAmy-28" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;&quot;&gt;&lt;font face=&quot;Arial, sans-serif&quot; color=&quot;#1f1f1f&quot;&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: rgb(248, 249, 250);&quot;&gt;BuyTicket(&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;background-color: rgb(251, 251, 251);&quot;&gt;sessionId, seats&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250); color: rgb(31, 31, 31); font-family: Arial, sans-serif; text-align: left; white-space-collapse: preserve; font-size: 10px;&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="uQY5IywjhWXq_1PrJAmy-28" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;&quot;&gt;&lt;font face=&quot;Arial, sans-serif&quot; color=&quot;#1f1f1f&quot;&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: rgb(248, 249, 250);&quot;&gt;BuyTicket(&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;background-color: rgb(251, 251, 251);&quot;&gt;sessionId, requestedTickets&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;background-color: rgb(248, 249, 250); color: rgb(31, 31, 31); font-family: Arial, sans-serif; text-align: left; white-space-collapse: preserve; font-size: 10px;&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="80" y="120" width="110" height="30" as="geometry" />
         </mxCell>
         <mxCell id="uQY5IywjhWXq_1PrJAmy-33" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;entryX=0.009;entryY=0.633;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="uQY5IywjhWXq_1PrJAmy-34" edge="1">
@@ -187,11 +187,11 @@
             <mxPoint x="410" y="170" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="uQY5IywjhWXq_1PrJAmy-34" value="ticket:Ticket" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="uQY5IywjhWXq_1PrJAmy-34" value="now_ticket:Ticket" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="414" y="180" width="126" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uQY5IywjhWXq_1PrJAmy-35" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;new(nextTicketId++, hall, place[])&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="190" y="180" width="230" height="20" as="geometry" />
+        <mxCell id="uQY5IywjhWXq_1PrJAmy-35" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;new()&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="270" y="180" width="70" height="20" as="geometry" />
         </mxCell>
         <mxCell id="uQY5IywjhWXq_1PrJAmy-36" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="uQY5IywjhWXq_1PrJAmy-34" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -201,27 +201,68 @@
         </mxCell>
         <mxCell id="uQY5IywjhWXq_1PrJAmy-39" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="uQY5IywjhWXq_1PrJAmy-34" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="475" y="480" as="sourcePoint" />
+            <mxPoint x="477" y="230" as="sourcePoint" />
             <mxPoint x="477" y="340" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="r8uDqvCN6_3pgSBcEFhk-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="560" y="40" width="126" height="30" as="geometry" />
+        <mxCell id="93gTI9IbRymiNBmTxKJC-1" value="Customer&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="55" y="10" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="r8uDqvCN6_3pgSBcEFhk-3" value=":Session" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="560" y="40" width="126" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="r8uDqvCN6_3pgSBcEFhk-4" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.531;entryY=0.957;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+        <mxCell id="SEr3-Do2uFrHuh-Vlm5X-2" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="622.5" y="481" as="sourcePoint" />
-            <mxPoint x="622.5" y="70" as="targetPoint" />
+            <mxPoint x="475" y="480" as="sourcePoint" />
+            <mxPoint x="477" y="210" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="r8uDqvCN6_3pgSBcEFhk-6" value="remove(seat)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="530" y="290" width="60" height="20" as="geometry" />
+        <mxCell id="YNufL_5ouMDhUrTlc-CU-1" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;loop [for each seatId in requestedTickets]&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=220;height=30;" vertex="1" parent="1">
+          <mxGeometry x="170" y="220" width="390" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="93gTI9IbRymiNBmTxKJC-1" value="Customer&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="55" y="10" width="30" height="60" as="geometry" />
+        <mxCell id="qPDKlNc8bQ7QrXJyh0qO-1" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0.983;entryY=0.629;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="205" y="337" as="sourcePoint" />
+            <mxPoint x="205" y="381" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="230" y="347" />
+              <mxPoint x="230" y="367" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GnFlV6d3Yq1h4CTIL1wm-1" value="BuyingTime = DateTime.UtcNow&lt;br&gt;Valid = false" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="420" y="299" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TelsqPhVLNKfBgxZIKc3-2" value="AvailableTickets.remove(ticket)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="234" y="340" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TelsqPhVLNKfBgxZIKc3-4" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;alt [ticket != null]&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=220;height=30;" vertex="1" parent="1">
+          <mxGeometry x="180" y="278" width="360" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="yM0nXVDUzj4Ra4UBdmdQ-3" value="add(ticket)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="300" y="302" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="qJCSTC4Rnbo1UYNHQ04y-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.95;exitY=0.596;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="204" y="316.9200000000001" as="sourcePoint" />
+            <mxPoint x="480" y="316" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MSd1fW1czTxY20Wna00q-2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.95;exitY=0.596;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="205" y="332.5" as="sourcePoint" />
+            <mxPoint x="640" y="332" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MSd1fW1czTxY20Wna00q-3" value="" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="205" y="250" as="sourcePoint" />
+            <mxPoint x="205" y="276" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="240" y="250" />
+              <mxPoint x="230" y="276" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WapsZ3TYm3tPR1dvcxB--1" value="now_tickets" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="400" width="70" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
