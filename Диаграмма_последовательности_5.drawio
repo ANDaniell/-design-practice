@@ -215,7 +215,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="YNufL_5ouMDhUrTlc-CU-1" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;loop [for each seatId in requestedTickets]&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=220;height=30;" vertex="1" parent="1">
-          <mxGeometry x="170" y="220" width="390" height="190" as="geometry" />
+          <mxGeometry x="172" y="220" width="638" height="190" as="geometry" />
         </mxCell>
         <mxCell id="qPDKlNc8bQ7QrXJyh0qO-1" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0.983;entryY=0.629;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -234,14 +234,14 @@
           <mxGeometry x="234" y="340" width="180" height="40" as="geometry" />
         </mxCell>
         <mxCell id="TelsqPhVLNKfBgxZIKc3-4" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;alt [ticket != null]&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=220;height=30;" vertex="1" parent="1">
-          <mxGeometry x="180" y="278" width="360" height="110" as="geometry" />
+          <mxGeometry x="180" y="278" width="480" height="110" as="geometry" />
         </mxCell>
         <mxCell id="yM0nXVDUzj4Ra4UBdmdQ-3" value="add(ticket)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="300" y="302" width="60" height="20" as="geometry" />
         </mxCell>
         <mxCell id="qJCSTC4Rnbo1UYNHQ04y-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.95;exitY=0.596;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="204" y="316.9200000000001" as="sourcePoint" />
+            <mxPoint x="206" y="316.9200000000001" as="sourcePoint" />
             <mxPoint x="480" y="316" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -251,18 +251,20 @@
             <mxPoint x="640" y="332" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MSd1fW1czTxY20Wna00q-3" value="" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="205" y="250" as="sourcePoint" />
-            <mxPoint x="205" y="276" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="240" y="250" />
-              <mxPoint x="230" y="276" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
         <mxCell id="WapsZ3TYm3tPR1dvcxB--1" value="now_tickets" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="90" y="400" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="WapsZ3TYm3tPR1dvcxB--2" value="session: Sessions" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};size=30;" vertex="1" parent="1">
+          <mxGeometry x="740" y="40" width="100" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="WapsZ3TYm3tPR1dvcxB--3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="WapsZ3TYm3tPR1dvcxB--2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="794.5" y="264" as="sourcePoint" />
+            <mxPoint x="205" y="265" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WapsZ3TYm3tPR1dvcxB--4" value="ticket =&amp;nbsp;AvailableTickets.FirstOrDefault(TicketId == seatId)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="419" y="242" width="330" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
