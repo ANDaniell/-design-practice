@@ -434,16 +434,7 @@
             <mxPoint x="230" y="477" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="dn-nEJhvCDlLsl5YoZMT-14" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«include»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
-          <mxGeometry x="640" y="348" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="dn-nEJhvCDlLsl5YoZMT-15" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«include»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
-          <mxGeometry x="640" y="300" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="dn-nEJhvCDlLsl5YoZMT-16" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«include»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
-          <mxGeometry x="625" y="250" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="dn-nEJhvCDlLsl5YoZMT-17" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«include»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
+        <mxCell id="dn-nEJhvCDlLsl5YoZMT-17" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«extend»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
           <mxGeometry x="550" y="220" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="bwO0E5Vqnh1Iw2Y28gl2-1" value="Посмотреть игры" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
@@ -454,6 +445,15 @@
             <mxPoint x="380" y="550" as="sourcePoint" />
             <mxPoint x="230" y="500" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="NJtMDYeOS1mZmfIl66dQ-0" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«extend»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
+          <mxGeometry x="630.75" y="250" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="NJtMDYeOS1mZmfIl66dQ-1" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«extend»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
+          <mxGeometry x="650" y="305" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="NJtMDYeOS1mZmfIl66dQ-2" value="&lt;span style=&quot;font-size: 8px; background-color: rgb(255, 255, 255);&quot;&gt;«extend»&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="PKpnp_iKhnU0a8_UWCfo-1">
+          <mxGeometry x="650" y="360" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
