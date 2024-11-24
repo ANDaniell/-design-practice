@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:132.0) Gecko/20100101 Firefox/132.0" version="24.9.0" pages="3">
   <diagram name="Собственный кинотеатр" id="rnaNZMnlfwjxVZvryFjj">
-    <mxGraphModel dx="989" dy="551" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="f3-Gvlm2Z2FciO2JjJAF-0" />
         <mxCell id="f3-Gvlm2Z2FciO2JjJAF-1" parent="f3-Gvlm2Z2FciO2JjJAF-0" />
@@ -455,7 +455,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="Fakel" id="J5MovJHjWMtqBHR7f5Ix">
-    <mxGraphModel dx="1195" dy="666" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="PKpnp_iKhnU0a8_UWCfo-0" />
         <mxCell id="PKpnp_iKhnU0a8_UWCfo-1" parent="PKpnp_iKhnU0a8_UWCfo-0" />
