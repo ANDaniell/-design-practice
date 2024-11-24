@@ -1,7 +1,7 @@
 
 ![Диаграммы_вариантов_использования-Собственный кинотеатр drawio (3)](https://github.com/user-attachments/assets/a21ce526-290b-45cf-b8be-a351f84b0679)
 
-# Описание
+# Описание Нашей модели кинотеатра
 
 1. **Акторы:**
     
@@ -151,7 +151,7 @@
 3. Пользователь выбирает другое место, повторяя шаг 2 основного сценария.
 
 
-## Goodwin cinema
+# Goodwin cinema
 
 ![Диаграммы_вариантов_использования-Goodwin Cinema drawio (2)](https://github.com/user-attachments/assets/46cfc667-3b61-4fcc-9ace-379860224764)
 
@@ -225,8 +225,10 @@
 ---
 
 
-## FAKEL
-![Диаграммы_вариантов_использования-Fakel drawio](https://github.com/user-attachments/assets/a4ee2043-2a6c-4057-89ca-e49cdf1c0d3d)
+# FAKEL
+
+![Диаграммы_вариантов_использования-Fakel drawio (1)](https://github.com/user-attachments/assets/3ad2ded1-0c27-4276-9d53-dad4dbf808ee)
+
 ### Общая структура
 
 1. **Акторы:**
