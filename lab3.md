@@ -1,5 +1,7 @@
-#![Диаграммы_вариантов_использования-Собственный кинотеатр drawio (2)](https://github.com/user-attachments/assets/64283eb7-7360-4e30-b2c3-d8f5c9782cf2)
-## Описание
+
+![Диаграммы_вариантов_использования-Собственный кинотеатр drawio (3)](https://github.com/user-attachments/assets/a21ce526-290b-45cf-b8be-a351f84b0679)
+
+# Описание
 
 1. **Акторы:**
     
