@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.9.1">
   <diagram name="Диаграмма компонентов" id="Ea80tIoXrc0XHkkVBQ1X">
-    <mxGraphModel dx="2030" dy="570" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2664" dy="869" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -366,6 +366,9 @@
             <mxPoint x="410" y="550" as="sourcePoint" />
             <mxPoint x="220" y="510" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="zr7XyjYhcZU2Mr3b3k9c-183" value="Основной компонент ServerApplication требует интерфейсы обслуживания клиента ICustomer и регистрации пользователя IUserRegistrate. Интерфейсы используются в конкретных элементах основного компонента — CustomerServicing и Administrate. Компонент Administrate содержит интерфейс для найма работников и логику работы CRUD пользователей системы, а также CRUD элементов структуры каталога SessionsStructure. Для продажи билета реализован интерфейс IGetTicketr компонентом TicketSelling, которому для работы необходимы компоненты SessionsStructure и CustomerServicing.&#xa;Также основной компонент ServerApplication задействует компонент с данными DataManagement, используемый компонентом аналитики и статистики — AnalyticsSystem." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="29" y="340" width="791" height="90" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
