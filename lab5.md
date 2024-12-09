@@ -110,7 +110,7 @@
 ---
 
 ### Диаграмма состояний
-![Диаграмма_состояний drawio](https://github.com/user-attachments/assets/2937167e-11ee-48dc-b1aa-a064a60d69d5)
+![Диаграмма_состояний drawio](https://github.com/user-attachments/assets/f46be5d2-6592-4106-88ba-24d81f484798)
 
 
 ### **Описание состояний**
